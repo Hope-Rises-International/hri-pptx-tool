@@ -68,6 +68,15 @@ Do NOT create a local `learnings.md` or `hri-stack-learnings.md` in this repo. I
 
 2026-04-13: SF API credentials migrated from bsimmons@hoperises.org to gcpuser@hoperises.org (API Only User profile). Three secrets updated in Secret Manager: sfdc-username, sfdc-password, sfdc-security-token. Connected App (HRI_Cloud_Sync) unchanged.
 
+2026-04-15: Phase 1-3 complete. Markdown parser (8 slide types), PPTX builder using python-pptx with template txBody deep-copy (fixes Google Slides export artifacts — bare bodyPr/lstStyle blocking inheritance, 222% line spacing), Flask frontend, Cloud Run deploy. Key learnings:
+- python-pptx placeholder dict access (`0 in slide.placeholders`) fails on Google Slides templates — must iterate
+- `.text` setter clobbers layout bodyPr/lstStyle with bare elements, blocking inheritance. Fix: deep-copy entire txBody from layout, inject text, replace slide-level txBody
+- Google Slides exports 222% line spacing on title placeholders — override anything >150% to 100%
+- Org policy blocks `allUsers` IAM on Cloud Run. Use `--no-invoker-iam-check` for browser-facing tools
+- Service URL: https://hri-pptx-tool-1049804221584.us-east1.run.app
+- Portal card added under Comms & Info in hri-internal-portal
+- Brand skill updated with Deck Builder decision gate and markdown schema (replaces old PPTX build instructions)
+
 ---
 
 ## Session Start
