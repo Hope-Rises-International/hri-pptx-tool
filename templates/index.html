@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck Builder | Hope Rises International</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #FFFFFF;
+            color: #000000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: #1E5773;
+            color: #FFFFFF;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header img {
+            height: 40px;
+            width: 40px;
+        }
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .header .subtitle {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-left: auto;
+        }
+
+        /* Main content */
+        .main {
+            flex: 1;
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .intro {
+            margin-bottom: 24px;
+        }
+        .intro h2 {
+            color: #1E5773;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .intro p {
+            color: #302625;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #1E5773;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 16px;
+            font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            border: 2px solid #97CBF0;
+            border-radius: 8px;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        textarea:focus {
+            border-color: #1E5773;
+        }
+
+        /* Filename row */
+        .filename-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .filename-row label {
+            font-weight: 600;
+            color: #1E5773;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .filename-row input {
+            flex: 0 0 240px;
+            padding: 10px 14px;
+            border: 2px solid #97CBF0;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .filename-row input:focus {
+            border-color: #1E5773;
+        }
+
+        /* Buttons */
+        .btn-generate {
+            background: #F26044;
+            color: #FFFFFF;
+            border: none;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-generate:hover {
+            background: #d4503a;
+        }
+        .btn-generate:active {
+            transform: scale(0.98);
+        }
+        .btn-generate:disabled {
+            background: #BC893F;
+            cursor: not-allowed;
+        }
+
+        /* Error */
+        .error-msg {
+            color: #F26044;
+            font-weight: 600;
+            margin-top: 12px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* Reference section */
+        .reference {
+            margin-top: 32px;
+            border-top: 2px solid #F7EDE8;
+            padding-top: 24px;
+        }
+        .reference-toggle {
+            background: none;
+            border: none;
+            color: #1E5773;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .reference-toggle .arrow {
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+        .reference-toggle .arrow.open {
+            transform: rotate(90deg);
+        }
+        .reference-content {
+            display: none;
+            margin-top: 16px;
+            background: #F7EDE8;
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .reference-content.show {
+            display: block;
+        }
+        .reference-content h4 {
+            color: #1E5773;
+            margin: 16px 0 8px 0;
+            font-size: 14px;
+        }
+        .reference-content h4:first-child {
+            margin-top: 0;
+        }
+        .reference-content code {
+            background: #FFFFFF;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: "SF Mono", Menlo, Consolas, monospace;
+            font-size: 12px;
+            color: #F26044;
+        }
+        .reference-content pre {
+            background: #FFFFFF;
+            padding: 14px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 12px;
+            line-height: 1.5;
+            margin: 8px 0;
+        }
+        .reference-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+        }
+        .reference-content th {
+            background: #1E5773;
+            color: #FFFFFF;
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+        .reference-content td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+        }
+        .reference-content tr:nth-child(even) td {
+            background: #FFFFFF;
+        }
+
+        /* Footer */
+        .footer {
+            background: #F7EDE8;
+            text-align: center;
+            padding: 12px;
+            font-size: 12px;
+            color: #302625;
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 16px; }
+            .header .subtitle { display: none; }
+            .main { padding: 20px 16px; }
+            textarea { min-height: 300px; font-size: 12px; }
+            .filename-row { flex-direction: column; align-items: stretch; }
+            .filename-row input { flex: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="/static/logo_icon.png" alt="HRI">
+        <h1>Deck Builder</h1>
+        <span class="subtitle">Generate branded presentations from markdown</span>
+    </div>
+
+    <div class="main">
+        <div class="intro">
+            <h2>Create a Presentation</h2>
+            <p>Paste structured markdown below and click Generate. The builder produces a branded PPTX using the HRI template with correct layouts, colors, and master elements.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="markdown">Markdown Content</label>
+            <textarea id="markdown" placeholder="---
+title: Deck Title Here
+subtitle: Optional Subtitle
+date: April 2026
+---
+
+# SECTION: First Major Section
+color: tide
+
+# CONTENT: Revenue Grew 40% Driven by Enterprise Expansion
+- First supporting point with detail
+- Second supporting point with detail
+- Third supporting point with detail
+
+# KPI: Q3 Performance Exceeded All Benchmarks
+- $4.8M | Public Fundraising Revenue
+- 12% | Year-over-Year Growth
+- 340 | New Donors Acquired
+- 87% | Retention Rate
+
+# TWO-COL: Pipeline Results Show Clear Segmentation Advantage
+left:
+- Left column point one
+- Left column point two
+right:
+- Right column point one
+- Right column point two
+
+# QUOTE: Words of Affirmation
+quote: The future is bright and full of hope.
+attribution: Bill Simmons"></textarea>
+        </div>
+
+        <div class="filename-row">
+            <label for="filename">Filename</label>
+            <input type="text" id="filename" value="deck.pptx" placeholder="deck.pptx">
+            <button class="btn-generate" id="generateBtn" onclick="generateDeck()">Generate Deck</button>
+        </div>
+        <div class="error-msg" id="errorMsg"></div>
+
+        <div class="reference">
+            <button class="reference-toggle" onclick="toggleReference()">
+                <span class="arrow" id="refArrow">&#9654;</span>
+                Markdown Reference
+            </button>
+            <div class="reference-content" id="refContent">
+                <h4>Slide Types</h4>
+                <table>
+                    <tr><th>Keyword</th><th>Layout</th><th>Description</th></tr>
+                    <tr><td><code>TITLE</code></td><td>Title slide</td><td>Opening slide with title + subtitle</td></tr>
+                    <tr><td><code>SECTION</code></td><td>Section divider</td><td>Color: tide, golden, restore, risingsun</td></tr>
+                    <tr><td><code>CONTENT</code></td><td>Title + bullets</td><td>Standard content slide</td></tr>
+                    <tr><td><code>TWO-COL</code></td><td>Two columns</td><td>Left/right bullet lists</td></tr>
+                    <tr><td><code>KPI</code></td><td>Metric cards</td><td>Format: <code>- VALUE | LABEL</code></td></tr>
+                    <tr><td><code>QUOTE</code></td><td>Pull quote</td><td>Quote text + attribution</td></tr>
+                    <tr><td><code>PHOTO</code></td><td>Content + photo</td><td>Bullets with photo placeholder</td></tr>
+                    <tr><td><code>BLANK</code></td><td>Empty</td><td>Master elements only</td></tr>
+                </table>
+
+                <h4>Frontmatter (Optional)</h4>
+                <pre>---
+title: Deck Title
+subtitle: Optional Subtitle
+date: April 2026
+---</pre>
+                <p>If present, generates a TITLE slide automatically as the first slide.</p>
+
+                <h4>Content Rules</h4>
+                <ul style="padding-left: 20px;">
+                    <li>Each slide starts with <code># KEYWORD: Title Text</code></li>
+                    <li>Bullets start with <code>- </code></li>
+                    <li>KPI values use <code>- VALUE | LABEL</code></li>
+                    <li>TWO-COL uses <code>left:</code> and <code>right:</code> sections</li>
+                    <li>SECTION accepts <code>color: tide|golden|restore|risingsun</code></li>
+                    <li>QUOTE uses <code>quote:</code> and <code>attribution:</code></li>
+                    <li>Unknown keywords default to CONTENT</li>
+                    <li>Empty slides (no content) are skipped</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        HRI Deck Builder v1.0 &mdash; Hope Rises International
+    </div>
+
+    <script>
+        function toggleReference() {
+            const content = document.getElementById('refContent');
+            const arrow = document.getElementById('refArrow');
+            content.classList.toggle('show');
+            arrow.classList.toggle('open');
+        }
+
+        async function generateDeck() {
+            const markdown = document.getElementById('markdown').value;
+            const filename = document.getElementById('filename').value || 'deck.pptx';
+            const btn = document.getElementById('generateBtn');
+            const errorMsg = document.getElementById('errorMsg');
+
+            errorMsg.textContent = '';
+
+            if (!markdown.trim()) {
+                errorMsg.textContent = 'Please paste markdown content before generating.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+
+            try {
+                const response = await fetch('/generate?filename=' + encodeURIComponent(filename), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: markdown,
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    errorMsg.textContent = data.error || 'An error occurred.';
+                    return;
+                }
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                errorMsg.textContent = 'Network error. Please try again.';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Generate Deck';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -17,3 +17,12 @@ Thumbs.db
 *~
 .vscode/
 .idea/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Generated output
+sample_output.pptx
+diagnostic.py
