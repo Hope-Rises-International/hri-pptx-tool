@@ -201,14 +201,84 @@ Tints may ONLY be created in these increments: **100%, 75%, 50%, 25%, 10%**. No 
 
 ### Presentations (PPTX)
 
-- **Use the existing template** at `assets/presentation_template.pptx` when editing/extending presentations
-- **For new presentations from scratch:**
-  - Title slide: Tide background with white text, or white/Cleanse background with Tide text. Logo prominently placed.
-  - Content slides: White or Cleanse background. Tide headings (Golos Text ExtraBold). Body in Golos Text Regular, Tide color.
-  - Accent slides: Rising Sun or Golden background for divider/section slides (use white text).
-  - Tables: Tide header row with white text; alternating Cleanse/white body rows.
-  - Charts: Use brand color palette in order: Tide, Rising Sun, Golden, Restore, Empower, Cleanse.
-  - Final slide: Logo centered, optional tagline "Present healing, eternal hope."
+**IMPORTANT — Decision Gate:** When the user asks to create a presentation, ask:
+
+> "Are you building a branded HRI presentation? If so, I'll generate structured markdown for the HRI Deck Builder — it produces a fully branded PPTX from the official template in one click. If not, I can help you build an unbranded presentation directly."
+
+#### If YES — Branded Presentation (Deck Builder workflow)
+
+**Do NOT attempt to build PPTX files directly.** Instead, produce structured markdown that the user pastes into the HRI Presentation Builder at:
+
+**https://hri-pptx-tool-1049804221584.us-east1.run.app**
+
+The builder uses the official HRI branded template with correct layouts, colors, master elements (watercolor wave, logo, golden underline), and Golos Text font — all baked in. Your job is to produce excellent *content*, not formatting.
+
+**Markdown Schema:**
+
+```
+---
+title: Deck Title Here
+subtitle: Optional Subtitle
+date: April 2026
+---
+
+# SECTION: Section Divider Title
+color: tide
+
+# CONTENT: Title Must Be a Complete Sentence Stating the Takeaway
+- First supporting point with enough detail to stand alone
+- Second supporting point
+- Third supporting point
+
+# KPI: Title Stating What the Metrics Show
+- $4.8M | Fundraising Revenue
+- 12% | Year-over-Year Growth
+- 340 | New Donors Acquired
+
+# TWO-COL: Title Stating the Comparison Conclusion
+left:
+- Left column point one
+- Left column point two
+- Left column point three
+right:
+- Right column point one
+- Right column point two
+- Right column point three
+
+# QUOTE: Title for Context
+quote: The quote text goes here.
+attribution: Speaker Name
+
+# BLANK:
+```
+
+**Slide Types Available:**
+
+| Keyword | Description |
+|---------|-------------|
+| `TITLE` | Opening slide (auto-generated from frontmatter) |
+| `SECTION` | Section divider. `color:` accepts: tide, golden, restore, risingsun |
+| `CONTENT` | Title + bullet points |
+| `TWO-COL` | Two columns with `left:` and `right:` bullet sections |
+| `KPI` | Metric cards. Format: `- VALUE \| LABEL` |
+| `QUOTE` | Pull quote with `quote:` and `attribution:` |
+| `PHOTO` | Content with photo placeholder (photo added manually later) |
+| `BLANK` | Empty slide with master elements only |
+
+**Content Rules (MUST follow):**
+
+1. **Maximum 3 bullets per slide.** This is a hard rule. If you have more than 3 points, either combine related ideas into fewer bullets or select only the 3 strongest points. Four bullets with long text will overflow the slide layout.
+2. **Titles must be complete sentences** that state the takeaway, not topic labels. Good: "Public Fundraising Revenue Reached $4.8M in FY26". Bad: "Revenue Update".
+3. **Bullets should be concise but substantive** — each one should stand alone as a meaningful point. Keep individual bullets under ~80 characters when possible.
+4. **Use SECTION dividers** to break the deck into logical groups. Vary the colors (tide, golden, restore, risingsun) for visual rhythm.
+5. **KPI slides work best with 3–4 metrics.** Use the `VALUE | LABEL` format exactly.
+6. **TWO-COL slides are for direct comparisons** — before/after, control/test, us/them. Max 3 bullets per column.
+
+**Your output:** Provide the complete markdown in a single code block. Tell the user to copy it and paste it into the Presentation Builder. The builder handles all branding, layout selection, fonts, colors, and master elements automatically.
+
+#### If NO — Unbranded Presentation
+
+Use Claude's native tools and artifacts to help the user build a non-branded presentation. Standard presentation best practices apply but HRI brand rules are not enforced.
 
 ### Word Documents (DOCX)
 
